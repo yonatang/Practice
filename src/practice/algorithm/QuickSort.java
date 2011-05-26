@@ -1,33 +1,38 @@
 package practice.algorithm;
 
-import java.util.Arrays;
 
-public class QuickSort<T extends Comparable<T>> {
+public class QuickSort {
 
-	static <T extends Comparable<T>> int part(T[] arr, int l, int h, int p) {
-		T pv = arr[p];
-		while (true) {
-			System.out.println(arr[l].compareTo(pv));
-			while (arr[l].compareTo(pv) < 0)
-				l++;
-			System.out.println(arr[h].compareTo(pv));
-			while (arr[h].compareTo(pv) >= 0)
-				h--;
-
-			if (l < h) {
-				T t = arr[l];
-				arr[l] = arr[h];
-				arr[h] = t;
-			} else {
-				return h;
-			}
-		}
+	static <T extends Comparable<T>> void swap(T[] arr, int i, int j) {
+		T t = arr[i];
+		arr[i] = arr[j];
+		arr[j] = t;
 	}
 
-	static <T extends Comparable<T>> void sort(T[] arr, int l, int h) {
-		int p = part(arr, l, h, l);
-		sort(arr, l, p);
-		sort(arr, p + 1, h);
+	static <T extends Comparable<T>> void sort(T[] arr, int low, int hight) {
+		T pivot = arr[low];
+
+		int i = low, j = hight;
+
+		while (i <= j) {
+			while (arr[i].compareTo(pivot) < 0) {
+				i++;
+			}
+			while (arr[j].compareTo(pivot) > 0) {
+				j--;
+			}
+			if (i <= j) {
+				swap(arr, i, j);
+				i++;
+				j--;
+			}
+		}
+		if (low < j) {
+			sort(arr, low, j);
+		}
+		if (i < hight) {
+			sort(arr, i, hight);
+		}
 	}
 
 	public static <T extends Comparable<T>> void sort(T[] arr) {
@@ -35,8 +40,15 @@ public class QuickSort<T extends Comparable<T>> {
 	}
 
 	public static void main(String[] arg) {
-		Integer[] t = { 5, 3, 5, 2, 4, 1 };
-		sort(t);
-		System.out.println(Arrays.toString(t));
+		int n = (int) (Math.random() * 10000) + 1;
+		Integer[] arr = new Integer[n];
+		for (int i = 0; i < n; i++) {
+			arr[i] = (int) (Math.random() * (n / 1.2));
+		}
+		sort(arr);
+		for (int i = 1; i < n; i++) {
+			assert arr[i - 1] <= arr[i];
+		}
+		System.out.println(String.format("good, for %d values", n));
 	}
 }
